@@ -1,8 +1,7 @@
 import re
 
-def generatePlayfairCipher(key, inpStr):
+def playfairCipherEncryption(key, inpStr):
     # declare necessary variables
-    encString = ""
     encArr = []
     keyMatrix = []
     alphabets = []
@@ -14,7 +13,7 @@ def generatePlayfairCipher(key, inpStr):
         if(not startAlp == 106):
             alphabets.append(chr(startAlp))
         startAlp += 1
-    
+    print("preparing key matrix...")
     # generate key matrix 5 * 5
     # remove spaces in the input key text and remove duplicate characters
     textMat = list(dict.fromkeys(list(key.replace(" ", ""))))
@@ -25,78 +24,179 @@ def generatePlayfairCipher(key, inpStr):
     for i in alphabets:
         if not i in textMat:
             keyMatrix.append(i)
-    print(keyMatrix)
     keyMatrix = [keyMatrix[i: i+5] for i in range(0, len(keyMatrix), 5)]
-    print(keyMatrix)
+    for i in keyMatrix:
+        print(i)
     # aggregate input string and create digraphs
     # finding index of spaces using regular expression
+    print("removing and updating space index from the string...")
     patt = re.finditer('\s+', inpStr)
     spaces = [i.start(0) for i in patt]
-    print(spaces)
+    print("space index", spaces)
     # removing spaces form inpstring and splitting the string into digraphs
     tempStr = inpStr.replace(" ", "")
-    if(len(tempStr) % 2 != 0):
-        tempStr += "x"
+    tstr = list(tempStr)
+    print(tstr)
 
-    print(tempStr)
+    print("seperating repetating characters with 'x'...")
+    for i in range(len(tempStr) - 1):
+        if(tempStr[i] == tempStr[i+1]):
+            tstr.insert(i+1, 'x')
+    print(tstr)
+
+    print("balancing the string if it is odd numbered..")
+    if(len(tstr) % 2 != 0):
+        tstr.append("x")
+    print(tstr)
+
     # split string into digraphs
-    aggArr = [list(tempStr[i:i+2]) for i in range(0, len(tempStr), 2)]
-    print(aggArr)
-
+    aggArr = [list(tstr[i:i+2]) for i in range(0, len(tstr), 2)]
+    
+    print("Processing digraphs...")
     # process digraphs => compare with key matrix and genrate ciphre
     for i in aggArr:
         print(i)
         tempi = 0
         tempj = 0
         for j in keyMatrix:
-            print(j)
             if(i[0] in j):
                 tempi = [keyMatrix.index(j), j.index(i[0])]
             if(i[1] in j):
                 tempj = [keyMatrix.index(j), j.index(i[1])]
-        print("tempi", tempi)
-        print("tempj", tempj)
 
         # all cases with key matrix intersection
-        if(tempi == tempj):
-            # both are same element
-            print("same")
-
-            pass
-        elif(tempi[1] == tempj[1] and not tempi[0] == tempj[0]):
+        if(tempi[1] == tempj[1] and not tempi[0] == tempj[0]):
             # horizontal
             print("vertical")
-            encArr.extend([keyMatrix[tempi[0]][tempi[1]+1 % 5], keyMatrix[tempj[0]][tempj[1]+1 % 5]])
+            encArr.extend([keyMatrix[(tempi[0]+1) % 5][tempi[1]], keyMatrix[(tempj[0]+1) % 5][tempj[1]]])
 
 
         elif(tempi[0] == tempj[0] and not tempi[1] == tempj[1]):
             # vertical
             print("horizontal")
-            encArr.extend([keyMatrix[tempi[0]][tempi[1]+1 % 5], keyMatrix[tempj[0]][tempj[1]+1 % 5]])
+            encArr.extend([keyMatrix[tempi[0]][(tempi[1]+1) % 5], keyMatrix[tempj[0]][(tempj[1]+1) % 5]])
+
         else:
             # intersection
             print("intersection")
-            encArr.extend([keyMatrix[tempj[0]][tempj[1]+1 % 5], keyMatrix[tempi[0]][tempi[1]-1 % 5]])
-    # return encrypted string
-    print(encArr)
+            encArr.extend([keyMatrix[tempi[0]][tempj[1]], keyMatrix[tempj[0]][tempi[1]]])
 
-    return encString
+    # inserting spaces 
+    for i in range(len(spaces)):
+        encArr.insert(spaces[i], " ")
+                        
+    # return encrypted string
+    return "".join(encArr)
+
+def playfairCipherDecryption(key, inpStr):
+    # declare necessary variables
+    encArr = []
+    keyMatrix = []
+    alphabets = []
+    spaces = []
+    aggArr = []
+    startAlp = 97
+    # generate alphabets
+    for i in range(26):
+        if(not startAlp == 106):
+            alphabets.append(chr(startAlp))
+        startAlp += 1
+    print("preparing key matrix...")
+    # generate key matrix 5 * 5
+    # remove spaces in the input key text and remove duplicate characters
+    textMat = list(dict.fromkeys(list(key.replace(" ", ""))))
+    if "j" in textMat:
+        tempIndex = textMat.index("j")
+        textMat[tempIndex] = "i"
+    keyMatrix.extend(textMat)
+    for i in alphabets:
+        if not i in textMat:
+            keyMatrix.append(i)
+    keyMatrix = [keyMatrix[i: i+5] for i in range(0, len(keyMatrix), 5)]
+    for i in keyMatrix:
+        print(i)
+    # aggregate input string and create digraphs
+    # finding index of spaces using regular expression
+    print("removing and updating space index from the string...")
+    patt = re.finditer('\s+', inpStr)
+    spaces = [i.start(0) for i in patt]
+    print("space index", spaces)
+    # removing spaces form inpstring and splitting the string into digraphs
+    tempStr = inpStr.replace(" ", "")
+    tstr = list(tempStr)
+    print(tstr)
+
+    print("seperating repetating characters with 'x'...")
+    for i in range(len(tempStr) - 1):
+        if(tempStr[i] == tempStr[i+1]):
+            tstr.insert(i+1, 'x')
+    print(tstr)
+
+    print("balancing the string if it is odd numbered..")
+    if(len(tstr) % 2 != 0):
+        tstr.append("x")
+    print(tstr)
+
+    # split string into digraphs
+    aggArr = [list(tstr[i:i+2]) for i in range(0, len(tstr), 2)]
+    
+    print("Processing digraphs...")
+    # process digraphs => compare with key matrix and genrate ciphre
+    for i in aggArr:
+        print(i)
+        tempi = 0
+        tempj = 0
+        for j in keyMatrix:
+            if(i[0] in j):
+                tempi = [keyMatrix.index(j), j.index(i[0])]
+            if(i[1] in j):
+                tempj = [keyMatrix.index(j), j.index(i[1])]
+
+        # all cases with key matrix intersection
+        if(tempi[1] == tempj[1] and not tempi[0] == tempj[0]):
+            # horizontal
+            print("vertical")
+            encArr.extend([keyMatrix[(tempi[0]-1) % 5][tempi[1]], keyMatrix[(tempj[0]-1) % 5][tempj[1]]])
+
+
+        elif(tempi[0] == tempj[0] and not tempi[1] == tempj[1]):
+            # vertical
+            print("horizontal")
+            encArr.extend([keyMatrix[tempi[0]][(tempi[1]-1) % 5], keyMatrix[tempj[0]][(tempj[1]-1) % 5]])
+
+        else:
+            # intersection
+            print("intersection")
+            encArr.extend([keyMatrix[tempi[0]][tempj[1]], keyMatrix[tempj[0]][tempi[1]]])
+
+
+    for i in range(encArr.count("x")):
+        encArr.remove("x")
+
+
+    # inserting spaces 
+    for i in range(len(spaces)):
+        encArr.insert(spaces[i], " ")
+
+                
+    # return encrypted string
+    return "".join(encArr)
 
 
 if __name__ == "__main__":
     # get key text
     keyTxt = str(input("Enter the key text: "))
-
     # get input string to be encrypted
     inpString = str(input("Enter the input string to be encrypted: "))
-
+    
+    print("Encrypting...")
     # call the generatePlayfairCipher method 
-    encryptedString = generatePlayfairCipher(keyTxt, inpString)
-
+    encryptedString = playfairCipherEncryption(keyTxt, inpString)
     # print encrypted string
-    print(encryptedString)
-    # decryption logic
+    print("encrypted string:", encryptedString)
 
+    print("Decrypting...")
     # call decryptcipher method give input as key and enc string
-
+    decryptedString = playfairCipherDecryption(keyTxt, encryptedString)
     # print decrypted string
+    print("decrypted string:", decryptedString)
