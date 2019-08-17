@@ -9,3 +9,4 @@ cryptography and network security algrithms and problems implemented in python.
 5. Prime number
 6. Magic square
 7. Playfair cipher
+8. RSA

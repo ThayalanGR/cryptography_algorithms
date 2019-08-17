@@ -1,3 +1,6 @@
+# Ex.No:                          Implementation of CaesarCipher
+# Batch no: 191106
+
 alphabets = []
 startAlp = 97
 # generate alphabets
@@ -47,3 +50,10 @@ if __name__ == "__main__":
     decryptedString = caesarDecryption(encryptedString, key)
 
     print("Decrypted String: "+ decryptedString)
+
+
+# output
+# Caesar Cipher
+# Enter the String to be encrypted: hello world
+# Encrypted String: olssv evysk 
+# Decrypted String: hello world  

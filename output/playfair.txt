@@ -1,3 +1,6 @@
+# Ex.No:                     Implementation of Playfair Algorithm
+# Batch No: 191106
+
 import re
 
 def playfairCipherEncryption(key, inpStr):
