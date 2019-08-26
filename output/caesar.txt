@@ -1,5 +1,5 @@
-# Ex.No:                          Implementation of CaesarCipher
-# Batch no: 191106
+# Ex.No:                        Implementation of Caesar Cipher
+# Batch No: 191106
 
 alphabets = []
 startAlp = 97

@@ -1,6 +1,8 @@
+# Ex. No:                   Implementation of Hill Cipher
+# Batch No: 191106
+
 
 balance = 0
-
 def hillCipher(salt, inputString):
     global balance
     
@@ -89,3 +91,12 @@ if __name__ == "__main__":
     decryptedString = hillCipher(inverseKeyMatrix, encryptedString)
 
     print("Decrypted String : "+  decryptedString[:len(decryptedString)-balance])
+
+
+# Output:-
+# Enter the String to be encrypted : hello
+# Entered String : hello
+# ['hel', 'lox']
+# Encrypted String : bximkx
+# ['bxi', 'mkx']
+# Decrypted String : hello
