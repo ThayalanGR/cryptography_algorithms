@@ -10,3 +10,4 @@ cryptography and network security algrithms and problems implemented in python.
 6. Magic square
 7. Playfair cipher
 8. RSA
+8. DSS - digital signature algorithm
